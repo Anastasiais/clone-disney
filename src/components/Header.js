@@ -7,10 +7,12 @@ const Nav = styled.nav`
   display: flex;
   align-items: center;
   padding: 0 36px;
+  overflow-x: hidden;
 
 `
 const Logo =styled.img`
   width: 80px;
+  padding-top: 22px;
 `
 
 const NavMenu = styled.div`
@@ -18,6 +20,7 @@ const NavMenu = styled.div`
   flex: 1;
   margin-left: 25px;
   align-items: center;
+  padding-top: 25px;
 
   a {
    display: flex;
@@ -62,6 +65,7 @@ const UserImg = styled.img `
   height: 48px;
   border-radius: 50%;
   cursor: pointer;
+  padding-top: 30px;
 
 `
 
@@ -95,7 +99,7 @@ function Header() {
                 <span>SERIES</span>
               </a>
            </NavMenu>
-           <UserImg src="https://avatarfiles.alphacoders.com/186/186489.jpg"/>
+           <UserImg src="http://pngimg.com/uploads/ironman/ironman_PNG46.png"/>
         </Nav>
     )
 }
