@@ -12,7 +12,7 @@ const Nav = styled.nav`
 `
 const Logo =styled.img`
   width: 80px;
-  padding-top: 22px;
+  padding-top: 12px;
 `
 
 const NavMenu = styled.div`
@@ -20,7 +20,7 @@ const NavMenu = styled.div`
   flex: 1;
   margin-left: 25px;
   align-items: center;
-  padding-top: 25px;
+  padding-top: 10px;
 
   a {
    display: flex;
@@ -65,7 +65,7 @@ const UserImg = styled.img `
   height: 48px;
   border-radius: 50%;
   cursor: pointer;
-  padding-top: 30px;
+  padding-top: 5px;
 
 `
 
