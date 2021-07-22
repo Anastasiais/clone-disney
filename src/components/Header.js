@@ -1,5 +1,9 @@
 import React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import { selectUserName, selectUserPhoto, setUserLogin } from '../features/user/userSlice';
+import { auth, provider } from "../firebase";
+import {useDispatch, useSelector } from 'react-redux';
+import { result } from 'lodash';
 
 const Nav = styled.nav`
   height: 70px;
@@ -68,38 +72,82 @@ const UserImg = styled.img `
   padding-top: 5px;
 
 `
+const Login = styled.div`
+  border: 1px solid #f9f9f9;
+  padding: 8px 16px;
+  border-radius: 4px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: all 0.2s ease 0s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f9f9f9;
+    color: #000;
+    border-color: transparent;
+  }
+`
+const LoginContainer = styled.div`
+   flex: 1;
+   display: flex;
+   justify-content: flex-end;
+`
 
 function Header() {
+  const dispatch = useDispatch()
+  const userName = useSelector(selectUserName);
+  const userPhoto = useSelector(selectUserPhoto);
+  const signIn = () => {
+     auth.signInWithPopup(provider)
+     .then((result) => {
+         let user = result.user;
+         dispatch(setUserLogin({
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL
+         }))
+     })
+  }
     return (
         <Nav>
            <Logo src="/images/logo.svg" />
-           <NavMenu>
-              <a href="#home">
-                <img alt="" src="/images/home-icon.svg"/>
-                <span>HOME</span>
-              </a>
-              <a href="#search">
-                <img alt="" src="/images/search-icon.svg"/>
-                <span>SEARCH</span>
-              </a>
-              <a href="#watchlist">
-                <img alt="" src="/images/watchlist-icon.svg"/>
-                <span>WATCHLIST</span>
-              </a>
-              <a href="#originals">
-                <img alt="" src="/images/original-icon.svg"/>
-                <span>ORIGINALS</span>
-              </a>
-              <a href="#movies">
-                <img alt="" src="/images/movie-icon.svg"/>
-                <span>MOVIES</span>
-              </a>
-              <a href="#series">
-                <img alt="" src="/images/series-icon.svg"/>
-                <span>SERIES</span>
-              </a>
-           </NavMenu>
-           <UserImg src="http://pngimg.com/uploads/ironman/ironman_PNG46.png"/>
+           {!userName ? (
+             <LoginContainer>
+                <Login onClick={signIn}>Login</Login>
+             </LoginContainer>
+             ) :
+            <>
+             <NavMenu>
+             <a href="#home">
+               <img alt="" src="/images/home-icon.svg"/>
+               <span>HOME</span>
+             </a>
+             <a href="#search">
+               <img alt="" src="/images/search-icon.svg"/>
+               <span>SEARCH</span>
+             </a>
+             <a href="#watchlist">
+               <img alt="" src="/images/watchlist-icon.svg"/>
+               <span>WATCHLIST</span>
+             </a>
+             <a href="#originals">
+               <img alt="" src="/images/original-icon.svg"/>
+               <span>ORIGINALS</span>
+             </a>
+             <a href="#movies">
+               <img alt="" src="/images/movie-icon.svg"/>
+               <span>MOVIES</span>
+             </a>
+             <a href="#series">
+               <img alt="" src="/images/series-icon.svg"/>
+               <span>SERIES</span>
+             </a>
+          </NavMenu>
+          <UserImg src="http://pngimg.com/uploads/ironman/ironman_PNG46.png"/>
+          </>
+        }
+
         </Nav>
     )
 }
