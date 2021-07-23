@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
-import { selectUserName, selectUserPhoto, setUserLogin } from '../features/user/userSlice';
+import { selectUserName, selectUserPhoto, setUserLogin, setSignOut} from '../features/user/userSlice';
 import { auth, provider } from "../firebase";
 import {useDispatch, useSelector } from 'react-redux';
-import { result } from 'lodash';
+import { useHistory } from 'react-router-dom';
 
 const Nav = styled.nav`
   height: 70px;
@@ -96,8 +96,23 @@ const LoginContainer = styled.div`
 
 function Header() {
   const dispatch = useDispatch()
+  const history = useHistory()
   const userName = useSelector(selectUserName);
   const userPhoto = useSelector(selectUserPhoto);
+
+  useEffect(() => {
+     auth.onAuthStateChanged(async (user) => {
+         if(user) {
+            dispatch(setUserLogin({
+                name: user.displayName,
+                email: user.email,
+                photo: user.photoURL
+             }))
+             history.push("/")
+         }
+     })
+  }, [])
+
   const signIn = () => {
      auth.signInWithPopup(provider)
      .then((result) => {
@@ -107,8 +122,18 @@ function Header() {
             email: user.email,
             photo: user.photoURL
          }))
+         history.push("/")
      })
   }
+
+  const signOut = () => {
+      auth.signOut()
+      .then(() => {
+        dispatch(setSignOut());
+        history.push("/login");
+      })
+  }
+
     return (
         <Nav>
            <Logo src="/images/logo.svg" />
@@ -144,7 +169,7 @@ function Header() {
                <span>SERIES</span>
              </a>
           </NavMenu>
-          <UserImg src="http://pngimg.com/uploads/ironman/ironman_PNG46.png"/>
+          <UserImg onClick={signOut} src="http://pngimg.com/uploads/ironman/ironman_PNG46.png"/>
           </>
         }
 
